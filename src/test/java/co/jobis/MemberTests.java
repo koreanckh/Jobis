@@ -2,32 +2,57 @@ package co.jobis;
 
 import co.jobis.controller.MemberController;
 import co.jobis.dto.MemberDTO;
+import co.jobis.entity.MemberEntity;
+import co.jobis.service.impl.MemberServiceImpl;
+import co.jobis.utils.MemberSha256;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.Assert;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class MemberTests {
 
     @Autowired
-    MemberController memberController;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private MemberController memberController;
+
+    @Autowired
+    private MemberServiceImpl memberServiceImpl;
 
     /**
      * 정상케이스
      */
     @Test
+    @Disabled
     void signUpTest() throws Exception {
         MemberDTO dto = new MemberDTO();
         dto.setUserId("jobis");
         dto.setPassword("Password");
-        dto.setName("최광훈");
-        dto.setRegNo("880701-1111111");
+        dto.setName("홍길동");
+        dto.setRegNo("860824-1655068");
 
         memberController.signUp(dto);
 
-//        assertEquals();
+        String[] tmpRegNo = dto.getRegNo().split("-");
+
+        MemberEntity before = new MemberEntity(dto.getUserId()
+                , MemberSha256.encrypt(dto.getPassword())
+                , dto.getName()
+                , MemberSha256.encrypt(tmpRegNo[0])
+                , MemberSha256.encrypt(tmpRegNo[1]));
+
+        MemberEntity after = memberServiceImpl.findByUserId(dto.getUserId());
+
+        assertEquals(before, after);
+
     }
 
 

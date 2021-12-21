@@ -22,6 +22,6 @@ public class MemberDTO {
     public String name;
 
     @NotBlank
-    @Pattern(regexp = "^[0-9]*$", message = "-을 포함하여 올바른 주민등록번호를 입력해주세요.")
+    @Size(min = 14, max = 14, message = " 주민등록번호는 -을 포함하여 14글자를 입력해주세요.")
     public String regNo;
 }
