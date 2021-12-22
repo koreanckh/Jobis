@@ -110,5 +110,14 @@ public class JwtTokenUtil implements Serializable {
         System.out.println("validateToken :: " + userId);
         return(userId.equals(memberDTO.getUserId()) && !isTokenExpired(token));
     }
+    
+    public String resolveToken(HttpServletRequest req) {
+        String requestHeader = req.getHeader(tokenHeader);
+        if(requestHeader != null && requestHeader.startsWith("Bearer ")) {
+            return requestHeader.substring(7);   
+        } else {
+            return null;   
+        }
+    }
 
 }
