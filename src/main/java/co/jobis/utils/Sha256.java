@@ -2,7 +2,7 @@ package co.jobis.utils;
 
 import java.security.MessageDigest;
 
-public class MemberSha256 {
+public class Sha256 {
 
     public static String encrypt(String inputStr) {
 

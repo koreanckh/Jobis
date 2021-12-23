@@ -8,4 +8,5 @@ public interface MemberService {
     JsonObject signUp (MemberDTO memberDTO) throws Exception ;
     MemberEntity findByUserId(String userId) throws Exception;
     JsonObject login(MemberDTO memberDTO) throws Exception;
+    String scrap(MemberDTO memberDTO) throws Exception;
 }

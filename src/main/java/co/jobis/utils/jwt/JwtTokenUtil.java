@@ -1,4 +1,4 @@
-package co.jobis.utils;
+package co.jobis.utils.jwt;
 
 import co.jobis.dto.MemberDTO;
 import io.jsonwebtoken.Claims;
@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -112,12 +113,13 @@ public class JwtTokenUtil implements Serializable {
     }
     
     public String resolveToken(HttpServletRequest req) {
-        String requestHeader = req.getHeader(tokenHeader);
-        if(requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            return requestHeader.substring(7);   
-        } else {
-            return null;   
-        }
+//        String requestHeader = req.getHeader(tokenHeader);
+//        if(requestHeader != null && requestHeader.startsWith("Bearer ")) {
+//            return requestHeader.substring(7);
+//        } else {
+//            return null;
+//        }
+        return null;
     }
 
 }

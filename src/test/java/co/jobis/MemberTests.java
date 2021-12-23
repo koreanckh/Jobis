@@ -1,17 +1,17 @@
 package co.jobis;
 
-import co.jobis.controller.MemberController;
+import co.jobis.controller.SzsController;
 import co.jobis.dto.MemberDTO;
 import co.jobis.entity.MemberEntity;
 import co.jobis.service.impl.MemberServiceImpl;
-import co.jobis.utils.MemberSha256;
+import co.jobis.utils.Sha256;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.Assert;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,7 +22,7 @@ class MemberTests {
     private MockMvc mockMvc;
 
     @Autowired
-    private MemberController memberController;
+    private SzsController memberController;
 
     @Autowired
     private MemberServiceImpl memberServiceImpl;
@@ -44,10 +44,10 @@ class MemberTests {
         String[] tmpRegNo = dto.getRegNo().split("-");
 
         MemberEntity before = new MemberEntity(dto.getUserId()
-                , MemberSha256.encrypt(dto.getPassword())
+                , Sha256.encrypt(dto.getPassword())
                 , dto.getName()
-                , MemberSha256.encrypt(tmpRegNo[0])
-                , MemberSha256.encrypt(tmpRegNo[1]));
+                , Sha256.encrypt(tmpRegNo[0])
+                , Sha256.encrypt(tmpRegNo[1]));
 
         MemberEntity after = memberServiceImpl.findByUserId(dto.getUserId());
 
