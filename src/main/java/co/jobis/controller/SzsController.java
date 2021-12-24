@@ -43,9 +43,16 @@ public class SzsController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO) throws Exception {
+    public ResponseEntity<?> login(HttpServletReqeust req, HttpServletResponse res, @RequestBody MemberDTO memberDTO) throws Exception {
         log.debug("login start :: " + memberDTO.getUserId());
-
+        Cookie jwtToken = new Cookie("refresh_token", value);
+        jwtToken.setHttpOnly(true);
+        jwtToken.setSecure(ture);
+        jwtToken.setPath("/");
+        jwtToken.setMaxAge(/*유효시간 입력*/);
+        
+        res.addCookie(token);
+        
         memberServiceImpl.login(memberDTO);
         Authentication authentication = new UserAuthentication(memberDTO.getUserId(), null, null);
         String token = JwtTokenProvider.generateToken(authentication);
@@ -54,7 +61,7 @@ public class SzsController {
 
         log.debug("login end :: " + memberDTO.getUserId());
 
-        return null;
+        return new ResponseEntity<>(jwtToken, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/scrap", method = RequestMethod.POST)
