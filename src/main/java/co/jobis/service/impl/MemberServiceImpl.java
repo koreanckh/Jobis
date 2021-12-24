@@ -117,6 +117,25 @@ public class MemberServiceImpl implements MemberService {
         Map<String, Object> params = new HashMap<>();
         params.put("name", memberDTO.getName());
         params.put("regNo", memberDTO.getRegNo());
+        
+        // https://vmpo.tistory.com/27 참고!
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setConnectTimeout(5000); //타임아웃 설정 5초
+        factory.setReadTimeout(5000);//타임아웃 설정 5초
+        RestTemplate restTemplate = new RestTemplate(factory);
+
+        HttpHeaders header = new HttpHeaders();
+        HttpEntity<?> entity = new HttpEntity<>(header);
+        
+        UriComponents uri = UriComponentsBuilder.fromHttpUrl(url+"?"+"key=430156241533f1d058c603178cc3ca0e&targetDt=20120101").build();
+
+        //이 한줄의 코드로 API를 호출해 MAP타입으로 전달 받는다.
+        ResponseEntity<Map> resultMap = restTemplate.exchange(uri.toString(), HttpMethod.GET, entity, Map.class);
+        result.put("statusCode", resultMap.getStatusCodeValue()); //http status code를 확인
+        result.put("header", resultMap.getHeaders()); //헤더 정보 확인
+        result.put("body", resultMap.getBody()); //실제 데이터 정보 확인
+ 
+        
 
         return getRequest(url, HttpMethod.POST, params);
     }
