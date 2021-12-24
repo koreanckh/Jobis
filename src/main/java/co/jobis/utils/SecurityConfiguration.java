@@ -25,16 +25,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/h2-console/**");
+        web.ignoring().antMatchers("/h2-console/**", "/swagger-ui.html");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/h2-console/**", "/szs/signup").permitAll()
+                .antMatchers("/h2-console/**", "/szs/signup", "/swagger-ui.html").permitAll()
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/h2-console/**")
+                .ignoringAntMatchers("/h2-console/**", "/swagger-ui.html")
                 .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler)

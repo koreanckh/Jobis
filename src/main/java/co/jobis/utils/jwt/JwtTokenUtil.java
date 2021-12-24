@@ -20,14 +20,14 @@ public class JwtTokenUtil implements Serializable {
     private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
     @Value("${jwt.secret}")
-    private String secret;
+    private static String secret;
 
     /**
      * jwt 토큰에서 userId 검색
      * @param token
      * @return
      */
-    public String getUserIdFromToken(String token) throws Exception {
+    public static String getUserIdFromToken(String token) throws Exception {
         try{
             return getClaimFromToken(token, Claims::getSubject);
         }catch(Exception ex){
@@ -63,7 +63,7 @@ public class JwtTokenUtil implements Serializable {
      * @param token
      * @return
      */
-    private Boolean isTokenExpired(String token){
+    private static Boolean isTokenExpired(String token){
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -73,9 +73,11 @@ public class JwtTokenUtil implements Serializable {
      * @param MemberDTO
      * @return
      */
-    public String generateToken(MemberDTO memberDTO){
+    public static String generateToken(MemberDTO memberDTO){
         Map<String, Object> claims = new HashMap<>();
         claims.put("name", memberDTO.getName());
+        claims.put("userId", memberDTO.getUserId());
+        claims.put("regNo", memberDTO.getRegNo());
         return doGenerateToken(claims, memberDTO.getUserId());
     }
 
@@ -89,14 +91,14 @@ public class JwtTokenUtil implements Serializable {
      * @param userId
      * @return
      */
-    private String doGenerateToken(Map<String, Object> claims, String userId) {
+    private static String doGenerateToken(Map<String, Object> claims, String userId) {
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setClaims(claims)
                 .setSubject(userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512,secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -106,7 +108,7 @@ public class JwtTokenUtil implements Serializable {
      * @param userDetails
      * @return
      */
-    public Boolean validateToken(String token, MemberDTO memberDTO) throws Exception {
+    public static Boolean validateToken(String token, MemberDTO memberDTO) throws Exception {
         final String userId = getUserIdFromToken(token);
         System.out.println("validateToken :: " + userId);
         return(userId.equals(memberDTO.getUserId()) && !isTokenExpired(token));

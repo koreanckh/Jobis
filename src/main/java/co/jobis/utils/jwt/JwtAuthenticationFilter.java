@@ -23,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request); //request에서 jwt 토큰을 꺼낸다.
-            if (StringUtils.isNotEmpty(jwt) && JwtTokenProvider.validateToken(jwt)) {
+            if (StringUtils.isNotEmpty(jwt) && JwtTokenUtil.validateToken(jwt)) {
                 String userId = JwtTokenProvider.getUserIdFromJWT(jwt); //jwt에서 사용자 id를 꺼낸다.
 
                 UserAuthentication authentication = new UserAuthentication(userId, null, null); //id를 인증한다.
