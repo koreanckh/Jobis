@@ -6,7 +6,6 @@ import co.jobis.entity.MemberEntity;
 import co.jobis.service.impl.MemberServiceImpl;
 import co.jobis.utils.Sha256;
 import com.google.gson.Gson;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,7 +43,6 @@ class MemberTests {
      * 회원가입 테스트
      */
     @Test
-    @Disabled
     void signUpTest() throws Exception {
         dto.setUserId("admin");
         dto.setPassword("test1234");
